@@ -11,46 +11,44 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.mika.loginconfile.R;
+import com.mika.loginconfile.databinding.ActivityMainBinding;
 
 
 public class MainActivity extends AppCompatActivity {
     private ViewModelMain vm;
-    private EditText etCorreo, etContraseña;
-    private TextView tvMensaje;
-    private Button btnLogear, btnRegistrar;
+    private ActivityMainBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding= ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         inicializar();
     }
 
     private void inicializar() {
         vm= ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(ViewModelMain.class);
-        this.etCorreo= findViewById(R.id.etCorreoLogin);
-        this.etContraseña= findViewById(R.id.etContraseñaLogin);
-        this.tvMensaje= findViewById(R.id.tvMensaje);
-        this.btnLogear= findViewById(R.id.btnIniciarSesion);
-        this.btnRegistrar= findViewById(R.id.btnRegistrar);
+
         vm.getError().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                tvMensaje.setText(s);
-                tvMensaje.setVisibility(View.VISIBLE);
-                etCorreo.setText("");
-                etContraseña.setText("");
+
+                binding.tvMensaje.setText(s);
+                binding.tvMensaje.setVisibility(View.VISIBLE);
+                binding.etCorreoLogin.setText("");
+                binding.etContraseALogin.setText("");
             }
         });
-        btnLogear.setOnClickListener(new View.OnClickListener() {
+        binding.btnIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                vm.autenticar(etCorreo.getText().toString(), etContraseña.getText().toString());
-                etCorreo.setText("");
-                etContraseña.setText("");
+                vm.autenticar(binding.etCorreoLogin.getText().toString(), binding.etContraseALogin.getText().toString());
+                binding.etCorreoLogin.setText("");
+                binding.etContraseALogin.setText("");
             }
         });
-        btnRegistrar.setOnClickListener(new View.OnClickListener() {
+        binding.btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 vm.registar();
